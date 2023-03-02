@@ -1,8 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using Reestr_oborudovanija;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddDbContext<ReestrContext>(options =>
+  options.UseSqlite(@"Data Source=G:\programms\sqlite\reestr.db"));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
