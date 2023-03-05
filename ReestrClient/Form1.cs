@@ -1,10 +1,13 @@
 using MaterialSkin;
 using MaterialSkin.Controls;
+using ReestrClient.Service;
+using ReestrClient.ServiceUseCases;
 
 namespace ReestrClient
 {
     public partial class FormLogin : MaterialForm
     {
+        UserUseCases login = new UserImpl();
         Dictionary<string, Color> colors = new Dictionary<string, Color>()
             {
                 { "dark", Color.FromArgb(51, 54, 41) },
@@ -28,5 +31,19 @@ namespace ReestrClient
             );
         }
 
+        private async void materialButtonLogIn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var info = await login.LogIn(materialTextBoxLogin.Text, materialTextBoxPassword.Text);
+                var t = new Thread(() => Application.Run(new FormReestr(info.Item1)));
+                t.Start();
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MaterialMessageBox.Show("Логин или пароль введены неверно", "Ошибка авторизации");
+            }
+        }
     }
 }

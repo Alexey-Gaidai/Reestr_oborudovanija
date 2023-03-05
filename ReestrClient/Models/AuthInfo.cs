@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ReestrClient.Models
 {
-    internal class AuthInfo
+    public class AuthInfo
     {
         public string access_token { get; set; }
         public string username { get; set; }

@@ -75,6 +75,7 @@
             this.materialButtonLogIn.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.materialButtonLogIn.UseAccentColor = false;
             this.materialButtonLogIn.UseVisualStyleBackColor = true;
+            this.materialButtonLogIn.Click += new System.EventHandler(this.materialButtonLogIn_Click);
             // 
             // pictureBox2
             // 
