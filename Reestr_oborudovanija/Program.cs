@@ -51,8 +51,21 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapControllers();
+
+app.UseDefaultFiles();
+
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthentication();
+
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapDefaultControllerRoute().RequireAuthorization();
+});
 
 app.Run();
