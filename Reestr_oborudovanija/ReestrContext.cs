@@ -9,6 +9,7 @@ namespace Reestr_oborudovanija
         public DbSet<State> States { get; set; }
         public DbSet<Storage> Storages { get; set; }
         public DbSet<Status> Statuses { get; set; }
+        public DbSet<User> Users { get; set; }
 
 
         public ReestrContext(DbContextOptions<ReestrContext> options) : base(options)

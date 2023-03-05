@@ -4,7 +4,14 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Count { get; set; }
+        public string NameInList { get; set; }
+        public bool Accounting { get; set; }
+        public string InventoryNumber { get; set; }
+        public float BalanceValue { get; set; }
+        public float Depreciation { get; set; }
+        public float ResidualValue { get; set; }
+        public int CountInList { get; set; }
+        public int CountFact { get; set; }
         public int State_id { get; set; }
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
