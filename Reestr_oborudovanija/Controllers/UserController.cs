@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Reestr_oborudovanija.Models;
+using Reestr_oborudovanija.Models.Client;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -18,17 +19,26 @@ namespace Reestr_oborudovanija.Controllers
         }
 
         [HttpPost("/signup")]
-        public async Task<ActionResult<User>> PostUser(User newUser)
+        public async Task<ActionResult<User>> PostUser(UserClient newUser)
         {
             cryptPassword(newUser.Password, out string hashedPassword, out string salt);
             if (_context.Users.Any(u => u.Login == newUser.Login))
             {
                 return StatusCode((int)HttpStatusCode.Conflict); ;
             }
-            _context.Users.Add(newUser);
+            var user = new User
+            {
+                Name = newUser.Name,
+                LastName = newUser.LastName,
+                Login = newUser.Login,
+                Password = hashedPassword,
+                Salt = salt,
+                Role = "user",
+            };
+            _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUsers", new { id = newUser.UserId }, newUser);
+            return CreatedAtAction("GetUsers", new { id = user.UserId }, user);
         }
 
         [HttpPost("/token")]
