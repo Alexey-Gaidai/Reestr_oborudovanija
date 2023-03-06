@@ -327,16 +327,62 @@ namespace ReestrClient
             {
                 MessageBox.Show(message);
             }
+            UpdateAll();
         }
 
         private void materialButtonUpdate_Click(object sender, EventArgs e)
         {
 
+
         }
 
-        private void materialButtonDelete_Click(object sender, EventArgs e)
+        private async void materialButtonDelete_Click(object sender, EventArgs e)
         {
+            // удаление
+            string message = "";
+            try
+            {
+                message = await data.Delete(authInfo.access_token, "Equipments", Convert.ToInt32(textBoxID.Text));
+                if (message == "Created")
+                {
+                    MessageBox.Show("Удалено");
+                }
+                else
+                    MessageBox.Show(message);
+            }
+            catch
+            {
+                MessageBox.Show(message);
+            }
+            UpdateAll();
+        }
 
+        //метод обновления дерева и полей
+        private void UpdateAll()
+        {
+            treeViewDeprecation.Nodes.Clear();
+            equip.Clear();
+            statuses.Clear();
+            storages.Clear();
+            states.Clear();
+            textBoxID.Clear();
+            textBoxName.Clear();
+            comboBoxAccounting.Items.Clear();
+            textBoxInventoryNumber.Clear();
+            textBoxNameInList.Clear();
+            textBoxBalanceValue.Clear();
+            textBoxDeprecation.Clear();
+            textBoxResidualValue.Clear();
+            richTextBoxRequired.Clear();
+            textBoxTransferTo.Clear();
+            textBoxFactCount.Clear();
+            textBoxListCount.Clear();
+            GetAllData();
+        }
+
+        private void обновитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateAll();
         }
     }
 }
