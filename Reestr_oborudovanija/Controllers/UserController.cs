@@ -12,10 +12,13 @@ namespace Reestr_oborudovanija.Controllers
     public class UserController: Controller
     {
         private readonly ReestrContext _context;
+        private readonly ILogger _logger;
 
-        public UserController(ReestrContext context)
+
+        public UserController(ReestrContext context, ILogger<UserController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpPost("/signup")]
@@ -37,8 +40,9 @@ namespace Reestr_oborudovanija.Controllers
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-
+           
             return CreatedAtAction("GetUsers", new { id = user.UserId }, user);
+            
         }
 
         [HttpPost("/token")]
@@ -66,6 +70,7 @@ namespace Reestr_oborudovanija.Controllers
                 role = identity.Claims.Where(c => c.Type == "Role").Select(c => c.Value).SingleOrDefault(),
                 userId = identity.Claims.Where(c => c.Type == "Id").Select(c => c.Value).SingleOrDefault()
             };
+            _logger.LogInformation($"Пользователь {username} совершил вход", DateTime.UtcNow.ToLongTimeString());
             return Json(response);
         }
 
