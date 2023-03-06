@@ -25,6 +25,7 @@ namespace ReestrClient.Service
                 {
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     client.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenKey}");
+                    client.DefaultRequestHeaders.Add("Username", tokenKey);
                     var result = await client.GetAsync(url);
                     var bytes = await result.Content.ReadAsByteArrayAsync();
                     Encoding encoding = Encoding.GetEncoding("utf-8");

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,16 +17,20 @@ namespace Reestr_oborudovanija.Controllers
     public class EquipmentsController : ControllerBase
     {
         private readonly ReestrContext _context;
+        private readonly ILogger _logger;
 
-        public EquipmentsController(ReestrContext context)
+        public EquipmentsController(ReestrContext context, ILogger<EquipmentsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/Equipments
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Equipment>>> GetEquipments()
         {
+            _logger.LogInformation($"Пользователь {Request.Headers["Username"]} совершил запрос оборудования", DateTime.UtcNow.ToLongTimeString());
             return await _context.Equipments.ToListAsync();
         }
 
