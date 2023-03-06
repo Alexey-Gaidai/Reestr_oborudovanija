@@ -10,12 +10,12 @@ namespace ReestrClient.ServiceUseCases
     internal interface DataUseCases
     {
         // универсальный get метод
-        public Task<(List<T>, string)> Get<T>(string tokenKey, string parameter);
+        public Task<(List<T>, string)> Get<T>(AuthInfo userInfo, string parameter);
         // универсальный post метод
-        public Task<string> Post<T>(string tokenKey, string parameter, T item);
+        public Task<string> Post<T>(AuthInfo userInfo, string parameter, T item);
         // универсальный delete метод
-        public Task<string> Delete(string tokenKey, string parameter, int id);
+        public Task<string> Delete(AuthInfo userInfo, string parameter, int id);
         // универсальный put метод
-        public Task<string> Put<T>(string tokenKey, string parameter, int id, T item);
+        public Task<string> Put<T>(AuthInfo userInfo, string parameter, int id, T item);
     }
 }

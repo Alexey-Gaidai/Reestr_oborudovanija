@@ -151,7 +151,7 @@ namespace ReestrClient
         {
             try
             {
-                var (equip,error) = await data.Get<Equipment>(authInfo.access_token, "Equipments");
+                var (equip,error) = await data.Get<Equipment>(authInfo, "Equipments");
                 if (equip != null)
                 {
                     MessageBox.Show("equip: "+equip.Count.ToString());
@@ -170,7 +170,7 @@ namespace ReestrClient
         {
             try
             {
-                var (status, error) = await data.Get<Status>(authInfo.access_token, "Status");
+                var (status, error) = await data.Get<Status>(authInfo, "Status");
                 if (status != null)
                 {
                     MessageBox.Show("status: " + status.Count.ToString());
@@ -189,7 +189,7 @@ namespace ReestrClient
         {
             try
             {
-                var (storages, error) = await data.Get<Storage>(authInfo.access_token, "Storages");
+                var (storages, error) = await data.Get<Storage>(authInfo, "Storages");
                 if (storages != null)
                 {
                     MessageBox.Show("storages: " + storages.Count.ToString());
@@ -208,7 +208,7 @@ namespace ReestrClient
         {
             try
             {
-                var (states, error) = await data.Get<State>(authInfo.access_token, "States");
+                var (states, error) = await data.Get<State>(authInfo, "States");
                 if (states != null)
                 {
                     MessageBox.Show("states: " + states.Count.ToString());
@@ -294,7 +294,7 @@ namespace ReestrClient
                 string message = "";
                 try
                 {
-                    message = await data.Post<Equipment>(authInfo.access_token, "Equipments", equipment);
+                    message = await data.Post<Equipment>(authInfo, "Equipments", equipment);
                     if (message == "Created")
                     {
                         MessageBox.Show("Создано");
@@ -321,7 +321,7 @@ namespace ReestrClient
                 string message = "";
                 try
                 {
-                    message = await data.Put<Equipment>(authInfo.access_token, "Equipments", equipment.Id, equipment);
+                    message = await data.Put<Equipment>(authInfo, "Equipments", equipment.Id, equipment);
                     if (message == "Created")
                     {
                         MessageBox.Show("Обновлено");
@@ -395,7 +395,7 @@ namespace ReestrClient
             string message = "";
             try
             {
-                message = await data.Delete(authInfo.access_token, "Equipments", Convert.ToInt32(textBoxID.Text));
+                message = await data.Delete(authInfo, "Equipments", Convert.ToInt32(textBoxID.Text));
                 if (message == "Created")
                 {
                     MessageBox.Show("Удалено");

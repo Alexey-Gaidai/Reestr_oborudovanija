@@ -27,5 +27,11 @@
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         public Storage Storage { get; set; }
+
+        public override string ToString()
+        {
+            return $" Id: {Id}, \n Name: {Name}, \n NameInList: {NameInList}, \n Accounting: {Accounting}, \n InventoryNumber: {InventoryNumber}, \n BalanceValue: {BalanceValue}, \n Depreciation: {Depreciation}, \n ResidualValue: {ResidualValue}, \n CountInList: {CountInList}, \n CountFact: {CountFact}, \n State_id: {State_id}, \n Usages: {Usages}, \n Status_id: {Status_id}, \n TransferTo: {TransferTo}, \n Required: {Required}, \n Storage_id: {Storage_id}\n";
+        }
     }
+
 }

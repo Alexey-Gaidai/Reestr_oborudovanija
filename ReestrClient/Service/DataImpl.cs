@@ -13,7 +13,7 @@ namespace ReestrClient.Service
 {
     internal class DataImpl : DataUseCases
     {
-        public async Task<(List<T>, string)> Get<T>(string tokenKey, string parameter)
+        public async Task<(List<T>, string)> Get<T>(AuthInfo userInfo, string parameter)
         {
             string data;
             var baseAddress = new Uri("https://localhost:7073");
@@ -24,8 +24,8 @@ namespace ReestrClient.Service
                 using (var client = new HttpClient(new HttpClientHandler()) { BaseAddress = baseAddress })
                 {
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenKey}");
-                    client.DefaultRequestHeaders.Add("Username", tokenKey);
+                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {userInfo.access_token}");
+                    client.DefaultRequestHeaders.Add("Username", userInfo.username);
                     var result = await client.GetAsync(url);
                     var bytes = await result.Content.ReadAsByteArrayAsync();
                     Encoding encoding = Encoding.GetEncoding("utf-8");
@@ -44,7 +44,7 @@ namespace ReestrClient.Service
 
         }
         // универсальный post метод
-        public async Task<string> Post<T>(string tokenKey, string parameter, T item)
+        public async Task<string> Post<T>(AuthInfo userInfo, string parameter, T item)
         {
             var baseAddress = new Uri("https://localhost:7073");
             string url = $"/api/{parameter}/";
@@ -54,7 +54,8 @@ namespace ReestrClient.Service
                 using (var client = new HttpClient(new HttpClientHandler()) { BaseAddress = baseAddress })
                 {
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenKey}");
+                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {userInfo.access_token}");
+                    client.DefaultRequestHeaders.Add("Username", userInfo.username);
                     var result = await client.PostAsJsonAsync(url, item);
                     var bytes = await result.Content.ReadAsByteArrayAsync();
                     Encoding encoding = Encoding.GetEncoding("utf-8");
@@ -71,7 +72,7 @@ namespace ReestrClient.Service
         }
 
         // универсальный delete метод
-        public async Task<string> Delete(string tokenKey, string parameter, int id)
+        public async Task<string> Delete(AuthInfo userInfo, string parameter, int id)
         {
             var baseAddress = new Uri("https://localhost:7073");
             string url = $"/api/{parameter}/{id}";
@@ -81,7 +82,8 @@ namespace ReestrClient.Service
                 using (var client = new HttpClient(new HttpClientHandler()) { BaseAddress = baseAddress })
                 {
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenKey}");
+                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {userInfo.access_token}");
+                    client.DefaultRequestHeaders.Add("Username", userInfo.username);
                     var result = await client.DeleteAsync(url);
                     var bytes = await result.Content.ReadAsByteArrayAsync();
                     Encoding encoding = Encoding.GetEncoding("utf-8");
@@ -98,7 +100,7 @@ namespace ReestrClient.Service
         }
 
         // универсальный put метод
-        public async Task<string> Put<T>(string tokenKey, string parameter, int id,T item)
+        public async Task<string> Put<T>(AuthInfo userInfo, string parameter, int id,T item)
         {
             var baseAddress = new Uri("https://localhost:7073");
             string url = $"/api/{parameter}/{id}";
@@ -108,7 +110,8 @@ namespace ReestrClient.Service
                 using (var client = new HttpClient(new HttpClientHandler()) { BaseAddress = baseAddress })
                 {
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenKey}");
+                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {userInfo.access_token}");
+                    client.DefaultRequestHeaders.Add("Username", userInfo.username);
                     var result = await client.PutAsJsonAsync(url, item);
                     var bytes = await result.Content.ReadAsByteArrayAsync();
                     Encoding encoding = Encoding.GetEncoding("utf-8");
