@@ -53,6 +53,7 @@ namespace Reestr_oborudovanija.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEquipment(int id, EquipmentClient newEquipment)
         {
+            var old = _context.Equipments.AsNoTracking().FirstOrDefault(e => e.Id == newEquipment.Id);
             var equipment = new Equipment
             {
                 Id = newEquipment.Id,
@@ -96,6 +97,13 @@ namespace Reestr_oborudovanija.Controllers
                 }
             }
 
+            _logger.LogInformation(
+                $"Пользователь {Request.Headers["Username"]} совершил изменение объекта \nСТАРЫЙ ОБЪЕКТ: \n " +
+                $"{old.ToString()}" +
+                $"НОВЫЙ ОБЪЕКТ: \n " +
+                $"{equipment.ToString()}",
+                DateTime.UtcNow.ToLongTimeString());
+
             return NoContent();
         }
 
@@ -125,6 +133,11 @@ namespace Reestr_oborudovanija.Controllers
             };
             _context.Equipments.Add(equipment);
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation(
+                $"Пользователь {Request.Headers["Username"]} совершил добавление объекта \n" +
+                $"{equipment.ToString()}",
+                DateTime.UtcNow.ToLongTimeString());
 
             return CreatedAtAction("GetEquipment", new { id = equipment.Id }, equipment);
         }
