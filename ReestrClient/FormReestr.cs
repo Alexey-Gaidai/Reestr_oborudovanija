@@ -22,6 +22,7 @@ namespace ReestrClient
         List<Storage> storages = new List<Storage>();
         List<Status> statuses = new List<Status>();
         List<State> states = new List<State>();
+        Equipment singleEquipment; 
         public FormReestr()
         {
             InitializeComponent();
@@ -89,7 +90,25 @@ namespace ReestrClient
                 var equipmentNodes = equipmentList.Where(e => e.Storage_id == storageNode.Storage_id).ToList();
                 foreach (var equipmentNode in equipmentNodes)
                 {
-                    TreeNode equipmentTreeNode = new TreeNode(equipmentNode.NameInList);
+                    /*
+                    отображать следующую информацию:
+                    - Название оборудования
+                    - прибор/расходник
+                    - если прибор, то на балансе / не на балансе
+                    - если на балансе, то название по ведомости
+                    - если на балансе, то инвентарный номер (это число многоразрядное, но может быть и прочерк)
+                    - если на балансе, то Балансовая стоимость (в рублях)
+                    - если на балансе, то Сумма амортизации (в рублях)
+                    - если на балансе, то Остаточная стоимость (в рублях)
+                    - если прибор, то работает/не работает/ремонтопригодно/требуются компоненты
+                    - где хранится
+                    - если прибор, то в какой работе используется
+                    - если расходник, то к какому/каким приборам (список ссылок)
+                    - статус: используется/может использоваться/требуется списание с баланса/списано с баланса, но используется/поставить на баланс/выбросить/требуется ремонт/требуется утилизация/утилизировано/требуется передать
+                    - место передачи, если статус Требуется передать
+                    - комментарий
+                     */
+                    TreeNode equipmentTreeNode = new TreeNode(equipmentNode.Name);
                     equipmentTreeNode.Tag = equipmentNode.Id;
                     rootNode.Nodes.Add(equipmentTreeNode);
 
@@ -117,28 +136,13 @@ namespace ReestrClient
                     TreeNode statusNode = new TreeNode($"Статус: {equipmentNode.Status_id}");
                     equipmentTreeNode.Nodes.Add(statusNode);
 
+                    if (statuses.Find(s => s.Id == equipmentNode.Status_id).Name == "Требуется передать")
+                    {
+                        TreeNode transferToNode = new TreeNode($"Место передачи: {equipmentNode.TransferTo}");
+                        equipmentTreeNode.Nodes.Add(transferToNode);
+                    }
                     TreeNode requiredNode = new TreeNode($"Требуется: {equipmentNode.Required}");
                     equipmentTreeNode.Nodes.Add(requiredNode);
-
-
-                    /*
-                    отображать следующую информацию:
-                    - Название оборудования
-                    - прибор/расходник
-                    - если прибор, то на балансе / не на балансе
-                    - если на балансе, то название по ведомости
-                    - если на балансе, то инвентарный номер (это число многоразрядное, но может быть и прочерк)
-                    - если на балансе, то Балансовая стоимость (в рублях)
-                    - если на балансе, то Сумма амортизации (в рублях)
-                    - если на балансе, то Остаточная стоимость (в рублях)
-                    - если прибор, то работает/не работает/ремонтопригодно/требуются компоненты
-                    - где хранится
-                    - если прибор, то в какой работе используется
-                    - если расходник, то к какому/каким приборам (список ссылок)
-                    - статус: используется/может использоваться/требуется списание с баланса/списано с баланса, но используется/поставить на баланс/выбросить/требуется ремонт/требуется утилизация/утилизировано/требуется передать
-                    - место передачи, если статус Требуется передать
-                    - комментарий
-                     */
                 }
             }
         }
@@ -233,7 +237,14 @@ namespace ReestrClient
             {
                 var equipment = equip.Find(e => e.Id.ToString() == textBoxID.Text);
                 textBoxName.Text = equipment.Name;
-                comboBoxAccounting.Text = equipment.Accounting.ToString();
+                if (equipment.Accounting == true)
+                {
+                    comboBoxAccounting.Text = "Учет";
+                }
+                else
+                {
+                    comboBoxAccounting.Text = "Не учет";
+                }
                 textBoxInventoryNumber.Text = equipment.InventoryNumber;
                 textBoxNameInList.Text = equipment.NameInList;
                 textBoxInventoryNumber.Text = equipment.InventoryNumber;
@@ -244,7 +255,14 @@ namespace ReestrClient
                 comboBoxState.Text = states.Find(s => s.Id == equipment.State_id).Name;
                 richTextBoxRequired.Text = equipment.Required;
                 comboBoxStorage.Text = storages.Find(s => s.Id == equipment.Storage_id).Name;
-                comboBoxUsages.Text = equipment.Usages.ToString();
+                if (equipment.Usages == true)
+                {
+                    comboBoxUsages.Text = "Используется";
+                }
+                else
+                {
+                    comboBoxUsages.Text = "Не используется";
+                }
                 textBoxTransferTo.Text = equipment.TransferTo;
                 textBoxFactCount.Text = equipment.CountFact.ToString();
                 textBoxListCount.Text = equipment.CountInList.ToString();
@@ -252,17 +270,13 @@ namespace ReestrClient
             else
             {
                 textBoxName.Text = "";
-                comboBoxAccounting.Text = "";
                 textBoxInventoryNumber.Text = "";
                 textBoxNameInList.Text = "";
                 textBoxInventoryNumber.Text = "";
                 textBoxBalanceValue.Text = "";
                 textBoxDeprecation.Text = "";
                 textBoxResidualValue.Text = "";
-                comboBoxStatus.Text = "";
                 richTextBoxRequired.Text = "";
-                comboBoxStorage.Text = "";
-                comboBoxUsages.Text = "";
                 textBoxTransferTo.Text = "";
                 textBoxFactCount.Text = "";
                 textBoxListCount.Text = "";
@@ -271,69 +285,108 @@ namespace ReestrClient
 
         private async void materialButtonCreate_Click(object sender, EventArgs e)
         {
-            // создание нового объекта
-            Equipment equipment = new Equipment();
-            equipment.Name = textBoxName.Text;
-            if (comboBoxAccounting.Text == "Учет")
-            {
-                equipment.Accounting = true;
-            }
+            bool isCreated = CreateEquipment();
+            if (!isCreated)
+                return;
             else
             {
-                equipment.Accounting = false;
-            }
-            equipment.InventoryNumber = textBoxInventoryNumber.Text;
-            equipment.NameInList = textBoxNameInList.Text;
-            equipment.InventoryNumber = textBoxInventoryNumber.Text;
-            equipment.BalanceValue = float.Parse(textBoxBalanceValue.Text);
-            equipment.Depreciation = float.Parse(textBoxDeprecation.Text);
-            equipment.ResidualValue = float.Parse(textBoxResidualValue.Text);
-            equipment.Status_id = statuses.Find(s => s.Name == comboBoxStatus.Text).Id;
-            equipment.State_id = states.Find(s => s.Name == comboBoxState.Text).Id;
-            equipment.Required = richTextBoxRequired.Text;
-            equipment.Storage_id = storages.Find(s => s.Name == comboBoxStorage.Text).Id;
-            if (comboBoxUsages.Text == "Используется")
-            {
-                equipment.Usages = true;
-            }
-            else
-            {
-                equipment.Usages = false;
-            }
-            equipment.TransferTo = textBoxTransferTo.Text;
-            equipment.CountFact = Convert.ToInt32(textBoxFactCount.Text);
-            equipment.CountInList = Convert.ToInt32(textBoxListCount.Text);
-            if (equip.Any(e => e.Id.ToString() == textBoxID.Text))
-            {
-                equipment.Id = Convert.ToInt32(textBoxID.Text);
-            }
-            else
-            {
-                equipment.Id = 0;
-            }
-            // отправка на сервер
-            string message = "";
-            try
-            {
-                message = await data.Post<Equipment>(authInfo.access_token, "Equipments", equipment);
-                if (message == "Created")
+                Equipment equipment = singleEquipment;
+                string message = "";
+                try
                 {
-                    MessageBox.Show("Создано");
+                    message = await data.Post<Equipment>(authInfo.access_token, "Equipments", equipment);
+                    if (message == "Created")
+                    {
+                        MessageBox.Show("Создано");
+                    }
+                    else
+                        MessageBox.Show(message);
                 }
-                else
+                catch
+                {
                     MessageBox.Show(message);
-            } 
-            catch
-            {
-                MessageBox.Show(message);
+                }
+                UpdateAll();
             }
-            UpdateAll();
         }
 
-        private void materialButtonUpdate_Click(object sender, EventArgs e)
+        private async void materialButtonUpdate_Click(object sender, EventArgs e)
         {
+            bool isCreated = CreateEquipment();
+            if (!isCreated)
+                return;
+            else 
+            {
+                Equipment equipment = singleEquipment;
+                string message = "";
+                try
+                {
+                    message = await data.Put<Equipment>(authInfo.access_token, "Equipments", equipment.Id, equipment);
+                    if (message == "Created")
+                    {
+                        MessageBox.Show("Обновлено");
+                    }
+                    else
+                        MessageBox.Show(message);
+                }
+                catch
+                {
+                    MessageBox.Show(message);
+                }
+            }
+        }
 
-
+        // метод который создает новый объект equipment из введенных данных с проверкой на корректность
+        private bool CreateEquipment()
+        {
+            singleEquipment = new Equipment();
+            try
+            {
+                singleEquipment.Name = textBoxName.Text;
+                if (comboBoxAccounting.Text == "Учет")
+                {
+                    singleEquipment.Accounting = true;
+                }
+                else
+                {
+                    singleEquipment.Accounting = false;
+                }
+                singleEquipment.InventoryNumber = textBoxInventoryNumber.Text;
+                singleEquipment.NameInList = textBoxNameInList.Text;
+                singleEquipment.InventoryNumber = textBoxInventoryNumber.Text;
+                singleEquipment.BalanceValue = float.Parse(textBoxBalanceValue.Text);
+                singleEquipment.Depreciation = float.Parse(textBoxDeprecation.Text);
+                singleEquipment.ResidualValue = float.Parse(textBoxResidualValue.Text);
+                singleEquipment.Status_id = statuses.Find(s => s.Name == comboBoxStatus.Text).Id;
+                singleEquipment.State_id = states.Find(s => s.Name == comboBoxState.Text).Id;
+                singleEquipment.Required = richTextBoxRequired.Text;
+                singleEquipment.Storage_id = storages.Find(s => s.Name == comboBoxStorage.Text).Id;
+                if (comboBoxUsages.Text == "Используется")
+                {
+                    singleEquipment.Usages = true;
+                }
+                else
+                {
+                    singleEquipment.Usages = false;
+                }
+                singleEquipment.TransferTo = textBoxTransferTo.Text;
+                singleEquipment.CountFact = Convert.ToInt32(textBoxFactCount.Text);
+                singleEquipment.CountInList = Convert.ToInt32(textBoxListCount.Text);
+                if (equip.Any(e => e.Id.ToString() == textBoxID.Text))
+                {
+                    singleEquipment.Id = Convert.ToInt32(textBoxID.Text);
+                }
+                else
+                {
+                    singleEquipment.Id = 0;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Прверьте введенные данные");
+                return false;
+            }
         }
 
         private async void materialButtonDelete_Click(object sender, EventArgs e)
