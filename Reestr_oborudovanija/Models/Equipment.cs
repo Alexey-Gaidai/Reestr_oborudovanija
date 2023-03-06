@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string NameInList { get; set; } = null;
+        public string? NameInList { get; set; } = null;
         public bool Accounting { get; set; }
-        public string InventoryNumber { get; set; } = null;
+        public string? InventoryNumber { get; set; } = null;
         public float BalanceValue { get; set; }
         public float Depreciation { get; set; }
         public float ResidualValue { get; set; }
@@ -21,8 +21,8 @@
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         public Status Status { get; set; }
-        public string TransferTo { get; set; } = null;
-        public string Required { get; set; } = null;
+        public string? TransferTo { get; set; } = null;
+        public string? Required { get; set; } = null;
         public int Storage_id { get; set; }
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
