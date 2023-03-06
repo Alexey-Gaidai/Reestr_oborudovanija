@@ -64,10 +64,10 @@
             this.textBoxNameInList = new System.Windows.Forms.TextBox();
             this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
             this.textBoxName = new System.Windows.Forms.TextBox();
-            this.materialButton3 = new MaterialSkin.Controls.MaterialButton();
-            this.materialButton2 = new MaterialSkin.Controls.MaterialButton();
+            this.materialButtonUpdate = new MaterialSkin.Controls.MaterialButton();
+            this.materialButtonDelete = new MaterialSkin.Controls.MaterialButton();
             this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialButton1 = new MaterialSkin.Controls.MaterialButton();
+            this.materialButtonCreate = new MaterialSkin.Controls.MaterialButton();
             this.textBoxID = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -148,10 +148,10 @@
             this.groupBox1.Controls.Add(this.textBoxNameInList);
             this.groupBox1.Controls.Add(this.materialLabel3);
             this.groupBox1.Controls.Add(this.textBoxName);
-            this.groupBox1.Controls.Add(this.materialButton3);
-            this.groupBox1.Controls.Add(this.materialButton2);
+            this.groupBox1.Controls.Add(this.materialButtonUpdate);
+            this.groupBox1.Controls.Add(this.materialButtonDelete);
             this.groupBox1.Controls.Add(this.materialLabel2);
-            this.groupBox1.Controls.Add(this.materialButton1);
+            this.groupBox1.Controls.Add(this.materialButtonCreate);
             this.groupBox1.Controls.Add(this.textBoxID);
             this.groupBox1.Location = new System.Drawing.Point(528, 97);
             this.groupBox1.Name = "groupBox1";
@@ -457,45 +457,47 @@
             this.textBoxName.Size = new System.Drawing.Size(401, 23);
             this.textBoxName.TabIndex = 5;
             // 
-            // materialButton3
+            // materialButtonUpdate
             // 
-            this.materialButton3.AutoSize = false;
-            this.materialButton3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButton3.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButton3.Depth = 0;
-            this.materialButton3.HighEmphasis = true;
-            this.materialButton3.Icon = null;
-            this.materialButton3.Location = new System.Drawing.Point(229, 521);
-            this.materialButton3.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButton3.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButton3.Name = "materialButton3";
-            this.materialButton3.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton3.Size = new System.Drawing.Size(173, 36);
-            this.materialButton3.TabIndex = 4;
-            this.materialButton3.Text = "Изменить";
-            this.materialButton3.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.materialButton3.UseAccentColor = false;
-            this.materialButton3.UseVisualStyleBackColor = true;
+            this.materialButtonUpdate.AutoSize = false;
+            this.materialButtonUpdate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButtonUpdate.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButtonUpdate.Depth = 0;
+            this.materialButtonUpdate.HighEmphasis = true;
+            this.materialButtonUpdate.Icon = null;
+            this.materialButtonUpdate.Location = new System.Drawing.Point(229, 521);
+            this.materialButtonUpdate.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButtonUpdate.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButtonUpdate.Name = "materialButtonUpdate";
+            this.materialButtonUpdate.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButtonUpdate.Size = new System.Drawing.Size(173, 36);
+            this.materialButtonUpdate.TabIndex = 4;
+            this.materialButtonUpdate.Text = "Изменить";
+            this.materialButtonUpdate.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButtonUpdate.UseAccentColor = false;
+            this.materialButtonUpdate.UseVisualStyleBackColor = true;
+            this.materialButtonUpdate.Click += new System.EventHandler(this.materialButtonUpdate_Click);
             // 
-            // materialButton2
+            // materialButtonDelete
             // 
-            this.materialButton2.AutoSize = false;
-            this.materialButton2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButton2.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButton2.Depth = 0;
-            this.materialButton2.HighEmphasis = true;
-            this.materialButton2.Icon = null;
-            this.materialButton2.Location = new System.Drawing.Point(410, 521);
-            this.materialButton2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButton2.Name = "materialButton2";
-            this.materialButton2.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton2.Size = new System.Drawing.Size(185, 36);
-            this.materialButton2.TabIndex = 3;
-            this.materialButton2.Text = "Удалить";
-            this.materialButton2.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.materialButton2.UseAccentColor = false;
-            this.materialButton2.UseVisualStyleBackColor = true;
+            this.materialButtonDelete.AutoSize = false;
+            this.materialButtonDelete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButtonDelete.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButtonDelete.Depth = 0;
+            this.materialButtonDelete.HighEmphasis = true;
+            this.materialButtonDelete.Icon = null;
+            this.materialButtonDelete.Location = new System.Drawing.Point(410, 521);
+            this.materialButtonDelete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButtonDelete.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButtonDelete.Name = "materialButtonDelete";
+            this.materialButtonDelete.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButtonDelete.Size = new System.Drawing.Size(185, 36);
+            this.materialButtonDelete.TabIndex = 3;
+            this.materialButtonDelete.Text = "Удалить";
+            this.materialButtonDelete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButtonDelete.UseAccentColor = false;
+            this.materialButtonDelete.UseVisualStyleBackColor = true;
+            this.materialButtonDelete.Click += new System.EventHandler(this.materialButtonDelete_Click);
             // 
             // materialLabel2
             // 
@@ -509,25 +511,26 @@
             this.materialLabel2.TabIndex = 2;
             this.materialLabel2.Text = "id:";
             // 
-            // materialButton1
+            // materialButtonCreate
             // 
-            this.materialButton1.AutoSize = false;
-            this.materialButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButton1.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButton1.Depth = 0;
-            this.materialButton1.HighEmphasis = true;
-            this.materialButton1.Icon = null;
-            this.materialButton1.Location = new System.Drawing.Point(7, 521);
-            this.materialButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButton1.Name = "materialButton1";
-            this.materialButton1.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton1.Size = new System.Drawing.Size(214, 36);
-            this.materialButton1.TabIndex = 1;
-            this.materialButton1.Text = "Создать";
-            this.materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.materialButton1.UseAccentColor = false;
-            this.materialButton1.UseVisualStyleBackColor = true;
+            this.materialButtonCreate.AutoSize = false;
+            this.materialButtonCreate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButtonCreate.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButtonCreate.Depth = 0;
+            this.materialButtonCreate.HighEmphasis = true;
+            this.materialButtonCreate.Icon = null;
+            this.materialButtonCreate.Location = new System.Drawing.Point(7, 521);
+            this.materialButtonCreate.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButtonCreate.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButtonCreate.Name = "materialButtonCreate";
+            this.materialButtonCreate.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButtonCreate.Size = new System.Drawing.Size(214, 36);
+            this.materialButtonCreate.TabIndex = 1;
+            this.materialButtonCreate.Text = "Создать";
+            this.materialButtonCreate.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButtonCreate.UseAccentColor = false;
+            this.materialButtonCreate.UseVisualStyleBackColor = true;
+            this.materialButtonCreate.Click += new System.EventHandler(this.materialButtonCreate_Click);
             // 
             // textBoxID
             // 
@@ -566,7 +569,7 @@
         private ToolStripMenuItem выходToolStripMenuItem;
         private GroupBox groupBox1;
         private MaterialSkin.Controls.MaterialLabel materialLabel2;
-        private MaterialSkin.Controls.MaterialButton materialButton1;
+        private MaterialSkin.Controls.MaterialButton materialButtonCreate;
         private TextBox textBoxID;
         private ToolStripMenuItem toolStripMenuItem2;
         private ToolStripMenuItem toolStripMenuItem3;
@@ -589,8 +592,8 @@
         private TextBox textBoxNameInList;
         private MaterialSkin.Controls.MaterialLabel materialLabel3;
         private TextBox textBoxName;
-        private MaterialSkin.Controls.MaterialButton materialButton3;
-        private MaterialSkin.Controls.MaterialButton materialButton2;
+        private MaterialSkin.Controls.MaterialButton materialButtonUpdate;
+        private MaterialSkin.Controls.MaterialButton materialButtonDelete;
         private MaterialSkin.Controls.MaterialLabel materialLabel13;
         private MaterialSkin.Controls.MaterialLabel materialLabel5;
         private ComboBox comboBoxStorage;

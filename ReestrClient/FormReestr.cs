@@ -32,7 +32,6 @@ namespace ReestrClient
             authInfo = _authInfo;
             InitializeComponent();
             GetAllData();
-            PopulateTreeView();
         }
 
         private void InitBoxes()
@@ -64,6 +63,7 @@ namespace ReestrClient
             statuses = await GetStatusList();
             states = await GetStatesList();
             InitBoxes();
+            PopulateTreeView();
         }
 
         private async void PopulateTreeView()
@@ -81,7 +81,7 @@ namespace ReestrClient
             foreach (var storageNode in storageNodes)
             {
                 // Создаем корневой узел для каждого Storage_id
-                TreeNode rootNode = new TreeNode($"Storage {storageNode.Storage_id}");
+                TreeNode rootNode = new TreeNode(storages.Find(s => s.Id == storageNode.Storage_id).Name);
                 rootNode.Tag = storageNode.Storage_id;
                 treeViewDeprecation.Nodes.Add(rootNode);
 
@@ -147,7 +147,7 @@ namespace ReestrClient
         {
             try
             {
-                var (equip,error) = await data.GetEquipment<Equipment>(authInfo.access_token, "Equipments");
+                var (equip,error) = await data.Get<Equipment>(authInfo.access_token, "Equipments");
                 if (equip != null)
                 {
                     MessageBox.Show("equip: "+equip.Count.ToString());
@@ -166,7 +166,7 @@ namespace ReestrClient
         {
             try
             {
-                var (status, error) = await data.GetEquipment<Status>(authInfo.access_token, "Status");
+                var (status, error) = await data.Get<Status>(authInfo.access_token, "Status");
                 if (status != null)
                 {
                     MessageBox.Show("status: " + status.Count.ToString());
@@ -185,7 +185,7 @@ namespace ReestrClient
         {
             try
             {
-                var (storages, error) = await data.GetEquipment<Storage>(authInfo.access_token, "Storages");
+                var (storages, error) = await data.Get<Storage>(authInfo.access_token, "Storages");
                 if (storages != null)
                 {
                     MessageBox.Show("storages: " + storages.Count.ToString());
@@ -204,7 +204,7 @@ namespace ReestrClient
         {
             try
             {
-                var (states, error) = await data.GetEquipment<State>(authInfo.access_token, "States");
+                var (states, error) = await data.Get<State>(authInfo.access_token, "States");
                 if (states != null)
                 {
                     MessageBox.Show("states: " + states.Count.ToString());
@@ -267,6 +267,76 @@ namespace ReestrClient
                 textBoxFactCount.Text = "";
                 textBoxListCount.Text = "";
             }
+        }
+
+        private async void materialButtonCreate_Click(object sender, EventArgs e)
+        {
+            // создание нового объекта
+            Equipment equipment = new Equipment();
+            equipment.Name = textBoxName.Text;
+            if (comboBoxAccounting.Text == "Учет")
+            {
+                equipment.Accounting = true;
+            }
+            else
+            {
+                equipment.Accounting = false;
+            }
+            equipment.InventoryNumber = textBoxInventoryNumber.Text;
+            equipment.NameInList = textBoxNameInList.Text;
+            equipment.InventoryNumber = textBoxInventoryNumber.Text;
+            equipment.BalanceValue = float.Parse(textBoxBalanceValue.Text);
+            equipment.Depreciation = float.Parse(textBoxDeprecation.Text);
+            equipment.ResidualValue = float.Parse(textBoxResidualValue.Text);
+            equipment.Status_id = statuses.Find(s => s.Name == comboBoxStatus.Text).Id;
+            equipment.State_id = states.Find(s => s.Name == comboBoxState.Text).Id;
+            equipment.Required = richTextBoxRequired.Text;
+            equipment.Storage_id = storages.Find(s => s.Name == comboBoxStorage.Text).Id;
+            if (comboBoxUsages.Text == "Используется")
+            {
+                equipment.Usages = true;
+            }
+            else
+            {
+                equipment.Usages = false;
+            }
+            equipment.TransferTo = textBoxTransferTo.Text;
+            equipment.CountFact = Convert.ToInt32(textBoxFactCount.Text);
+            equipment.CountInList = Convert.ToInt32(textBoxListCount.Text);
+            if (equip.Any(e => e.Id.ToString() == textBoxID.Text))
+            {
+                equipment.Id = Convert.ToInt32(textBoxID.Text);
+            }
+            else
+            {
+                equipment.Id = 0;
+            }
+            // отправка на сервер
+            string message = "";
+            try
+            {
+                message = await data.Post<Equipment>(authInfo.access_token, "Equipments", equipment);
+                if (message == "Created")
+                {
+                    MessageBox.Show("Создано");
+                }
+                else
+                    MessageBox.Show(message);
+            } 
+            catch
+            {
+                MessageBox.Show(message);
+            }
+        }
+
+        private void materialButtonUpdate_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void materialButtonDelete_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
