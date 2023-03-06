@@ -46,8 +46,28 @@ namespace Reestr_oborudovanija.Controllers
         // PUT: api/Equipments/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEquipment(int id, Equipment equipment)
+        public async Task<IActionResult> PutEquipment(int id, EquipmentClient newEquipment)
         {
+            var equipment = new Equipment
+            {
+                Id = newEquipment.Id,
+                Name = newEquipment.Name,
+                NameInList = newEquipment.NameInList,
+                Accounting = newEquipment.Accounting,
+                InventoryNumber = newEquipment.InventoryNumber,
+                BalanceValue = newEquipment.BalanceValue,
+                Depreciation = newEquipment.Depreciation,
+                ResidualValue = newEquipment.ResidualValue,
+                CountInList = newEquipment.CountInList,
+                CountFact = newEquipment.CountFact,
+                State_id = newEquipment.State_id,
+                Usages = newEquipment.Usages,
+                Status_id = newEquipment.Status_id,
+                TransferTo = newEquipment.TransferTo,
+                Required = newEquipment.Required,
+                Storage_id = newEquipment.Storage_id
+            };
+            
             if (id != equipment.Id)
             {
                 return BadRequest();

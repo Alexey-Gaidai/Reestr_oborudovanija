@@ -16,6 +16,6 @@ namespace ReestrClient.ServiceUseCases
         // универсальный delete метод
         public Task<string> Delete(string tokenKey, string parameter, int id);
         // универсальный put метод
-        public Task<string> Put<T>(string tokenKey, string parameter, T item);
+        public Task<string> Put<T>(string tokenKey, string parameter, int id, T item);
     }
 }

@@ -97,10 +97,10 @@ namespace ReestrClient.Service
         }
 
         // универсальный put метод
-        public async Task<string> Put<T>(string tokenKey, string parameter, T item)
+        public async Task<string> Put<T>(string tokenKey, string parameter, int id,T item)
         {
             var baseAddress = new Uri("https://localhost:7073");
-            string url = $"/api/{parameter}/";
+            string url = $"/api/{parameter}/{id}";
             string message = "";
             try
             {
