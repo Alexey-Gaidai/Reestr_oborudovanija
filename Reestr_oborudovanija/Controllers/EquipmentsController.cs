@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Reestr_oborudovanija;
 using Reestr_oborudovanija.Models;
+using Reestr_oborudovanija.Models.Client;
 
 namespace Reestr_oborudovanija.Controllers
 {
@@ -76,8 +77,27 @@ namespace Reestr_oborudovanija.Controllers
         // POST: api/Equipments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Equipment>> PostEquipment(Equipment equipment)
+        public async Task<ActionResult<Equipment>> PostEquipment(EquipmentClient newEquipment)
         {
+            var equipment = new Equipment
+            {
+                Id = newEquipment.Id,
+                Name = newEquipment.Name,
+                NameInList = newEquipment.NameInList,
+                Accounting = newEquipment.Accounting,
+                InventoryNumber = newEquipment.InventoryNumber,
+                BalanceValue = newEquipment.BalanceValue,
+                Depreciation = newEquipment.Depreciation,
+                ResidualValue = newEquipment.ResidualValue,
+                CountInList = newEquipment.CountInList,
+                CountFact = newEquipment.CountFact,
+                State_id = newEquipment.State_id,
+                Usages = newEquipment.Usages,
+                Status_id = newEquipment.Status_id,
+                TransferTo = newEquipment.TransferTo,
+                Required = newEquipment.Required,
+                Storage_id = newEquipment.Storage_id
+            };
             _context.Equipments.Add(equipment);
             await _context.SaveChangesAsync();
 
