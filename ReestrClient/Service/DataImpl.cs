@@ -12,11 +12,11 @@ namespace ReestrClient.Service
 {
     internal class DataImpl : DataUseCases
     {
-        public async Task<(List<Equipment>, string)> GetEquipment(string tokenKey, string parameter)
+        public async Task<(List<T>, string)> GetEquipment<T>(string tokenKey, string parameter)
         {
             string data;
             var baseAddress = new Uri("https://localhost:7073");
-            string url = $"/api/Equipments/";
+            string url = $"/api/{parameter}/";
             string message = "";
             try
             {
@@ -32,7 +32,7 @@ namespace ReestrClient.Service
                     result.EnsureSuccessStatusCode();
 
                 }
-                var equipments = JsonConvert.DeserializeObject<List<Equipment>>(data);
+                var equipments = JsonConvert.DeserializeObject<List<T>>(data);
                 return (equipments, message);
             }
             catch

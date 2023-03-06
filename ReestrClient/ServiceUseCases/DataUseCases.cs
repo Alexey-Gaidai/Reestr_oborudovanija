@@ -9,6 +9,6 @@ namespace ReestrClient.ServiceUseCases
 {
     internal interface DataUseCases
     {
-        public Task<(List<Equipment>, string)> GetEquipment(string tokenKey, string parameter);
+        public Task<(List<T>, string)> GetEquipment<T>(string tokenKey, string parameter);
     }
 }

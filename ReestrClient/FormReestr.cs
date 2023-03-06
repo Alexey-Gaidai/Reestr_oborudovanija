@@ -18,6 +18,10 @@ namespace ReestrClient
     {
         DataUseCases data = new DataImpl();
         AuthInfo authInfo = new AuthInfo();
+        List<Equipment> equip = new List<Equipment>();
+        List<Storage> storages = new List<Storage>();
+        List<Status> statuses = new List<Status>();
+        List<State> states = new List<State>();
         public FormReestr()
         {
             InitializeComponent();
@@ -27,8 +31,41 @@ namespace ReestrClient
         {
             authInfo = _authInfo;
             InitializeComponent();
+            GetAllData();
             PopulateTreeView();
         }
+
+        private void InitBoxes()
+        {
+            comboBoxStorage.DataSource = storages;
+            comboBoxStorage.DisplayMember = "Name";
+            comboBoxStorage.ValueMember = "Id";
+
+            comboBoxStatus.DataSource = statuses;
+            comboBoxStatus.DisplayMember = "Name";
+            comboBoxStatus.ValueMember = "Id";
+
+            comboBoxState.DataSource = states;
+            comboBoxState.DisplayMember = "Name";
+            comboBoxState.ValueMember = "Id";
+
+            comboBoxUsages.Items.Add("Используется");
+            comboBoxUsages.Items.Add("Не используется");
+
+            comboBoxAccounting.Items.Add("Учет");
+            comboBoxAccounting.Items.Add("Не учет");
+
+        }
+
+        private async void GetAllData()
+        {
+            equip = await GetEquipmentList();
+            storages = await GetStorageList();
+            statuses = await GetStatusList();
+            states = await GetStatesList();
+            InitBoxes();
+        }
+
         private async void PopulateTreeView()
         {
             // Получаем список всех объектов Equipment, отсортированных по Storage_id и Name
@@ -102,9 +139,6 @@ namespace ReestrClient
                     - место передачи, если статус Требуется передать
                     - комментарий
                      */
-
-
-
                 }
             }
         }
@@ -113,10 +147,10 @@ namespace ReestrClient
         {
             try
             {
-                var (equip,error) = await data.GetEquipment(authInfo.access_token, "");
+                var (equip,error) = await data.GetEquipment<Equipment>(authInfo.access_token, "Equipments");
                 if (equip != null)
                 {
-                    MessageBox.Show(error);
+                    MessageBox.Show("equip: "+equip.Count.ToString());
                     return equip;
                 }
                 return equip;
@@ -128,10 +162,111 @@ namespace ReestrClient
             }
             throw new NotImplementedException();
         }
+        private async Task<List<Status>> GetStatusList()
+        {
+            try
+            {
+                var (status, error) = await data.GetEquipment<Status>(authInfo.access_token, "Status");
+                if (status != null)
+                {
+                    MessageBox.Show("status: " + status.Count.ToString());
+                    return status;
+                }
+                return status;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+            throw new NotImplementedException();
+        }
+        private async Task<List<Storage>> GetStorageList()
+        {
+            try
+            {
+                var (storages, error) = await data.GetEquipment<Storage>(authInfo.access_token, "Storages");
+                if (storages != null)
+                {
+                    MessageBox.Show("storages: " + storages.Count.ToString());
+                    return storages;
+                }
+                return storages;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+            throw new NotImplementedException();
+        }
+        private async Task<List<State>> GetStatesList()
+        {
+            try
+            {
+                var (states, error) = await data.GetEquipment<State>(authInfo.access_token, "States");
+                if (states != null)
+                {
+                    MessageBox.Show("states: " + states.Count.ToString());
+                    return states;
+                }
+                return states;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+            throw new NotImplementedException();
+        }
+
 
         private void materialLabel5_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void textBoxID_TextChanged(object sender, EventArgs e)
+        {
+            //подставление значений по существующему оборудованию
+            if (equip.Any(e => e.Id.ToString() == textBoxID.Text))
+            {
+                var equipment = equip.Find(e => e.Id.ToString() == textBoxID.Text);
+                textBoxName.Text = equipment.Name;
+                comboBoxAccounting.Text = equipment.Accounting.ToString();
+                textBoxInventoryNumber.Text = equipment.InventoryNumber;
+                textBoxNameInList.Text = equipment.NameInList;
+                textBoxInventoryNumber.Text = equipment.InventoryNumber;
+                textBoxBalanceValue.Text = equipment.BalanceValue.ToString();
+                textBoxDeprecation.Text = equipment.Depreciation.ToString();
+                textBoxResidualValue.Text = equipment.ResidualValue.ToString();
+                comboBoxStatus.Text = statuses.Find(s => s.Id == equipment.State_id).Name;
+                comboBoxState.Text = states.Find(s => s.Id == equipment.State_id).Name;
+                richTextBoxRequired.Text = equipment.Required;
+                comboBoxStorage.Text = storages.Find(s => s.Id == equipment.Storage_id).Name;
+                comboBoxUsages.Text = equipment.Usages.ToString();
+                textBoxTransferTo.Text = equipment.TransferTo;
+                textBoxFactCount.Text = equipment.CountFact.ToString();
+                textBoxListCount.Text = equipment.CountInList.ToString();
+            }
+            else
+            {
+                textBoxName.Text = "";
+                comboBoxAccounting.Text = "";
+                textBoxInventoryNumber.Text = "";
+                textBoxNameInList.Text = "";
+                textBoxInventoryNumber.Text = "";
+                textBoxBalanceValue.Text = "";
+                textBoxDeprecation.Text = "";
+                textBoxResidualValue.Text = "";
+                comboBoxStatus.Text = "";
+                richTextBoxRequired.Text = "";
+                comboBoxStorage.Text = "";
+                comboBoxUsages.Text = "";
+                textBoxTransferTo.Text = "";
+                textBoxFactCount.Text = "";
+                textBoxListCount.Text = "";
+            }
         }
     }
 }
