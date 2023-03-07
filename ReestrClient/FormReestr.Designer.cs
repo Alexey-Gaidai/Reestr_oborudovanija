@@ -109,6 +109,7 @@
             this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
             this.выходToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.выходToolStripMenuItem.Text = "Выход";
+            this.выходToolStripMenuItem.Click += new System.EventHandler(this.выходToolStripMenuItem_Click);
             // 
             // обновитьToolStripMenuItem
             // 
@@ -187,6 +188,8 @@
             this.comboBoxStatus.Name = "comboBoxStatus";
             this.comboBoxStatus.Size = new System.Drawing.Size(228, 23);
             this.comboBoxStatus.TabIndex = 38;
+            this.comboBoxStatus.SelectedIndexChanged += new System.EventHandler(this.comboBoxStatus_SelectedIndexChanged);
+            this.comboBoxStatus.SelectedValueChanged += new System.EventHandler(this.comboBoxStatus_SelectedValueChanged);
             // 
             // comboBoxUsages
             // 
@@ -252,6 +255,7 @@
             // 
             // textBoxTransferTo
             // 
+            this.textBoxTransferTo.Enabled = false;
             this.textBoxTransferTo.Location = new System.Drawing.Point(129, 225);
             this.textBoxTransferTo.Name = "textBoxTransferTo";
             this.textBoxTransferTo.Size = new System.Drawing.Size(168, 23);

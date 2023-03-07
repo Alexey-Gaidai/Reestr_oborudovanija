@@ -40,7 +40,7 @@ namespace Reestr_oborudovanija.Controllers
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-           
+            _logger.LogInformation($"Зарегистрирован новый пользователь: {user.Login}", DateTime.UtcNow.ToLongTimeString());
             return CreatedAtAction("GetUsers", new { id = user.UserId }, user);
             
         }

@@ -49,12 +49,13 @@
             this.materialLabelSignUp.Depth = 0;
             this.materialLabelSignUp.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.materialLabelSignUp.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.materialLabelSignUp.Location = new System.Drawing.Point(125, 172);
+            this.materialLabelSignUp.Location = new System.Drawing.Point(78, 172);
             this.materialLabelSignUp.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabelSignUp.Name = "materialLabelSignUp";
-            this.materialLabelSignUp.Size = new System.Drawing.Size(75, 19);
+            this.materialLabelSignUp.Size = new System.Drawing.Size(157, 19);
             this.materialLabelSignUp.TabIndex = 15;
-            this.materialLabelSignUp.Text = "First time?";
+            this.materialLabelSignUp.Text = "Зарегистрироваться";
+            this.materialLabelSignUp.Click += new System.EventHandler(this.materialLabelSignUp_Click);
             // 
             // materialButtonLogIn
             // 
