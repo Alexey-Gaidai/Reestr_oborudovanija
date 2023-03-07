@@ -36,13 +36,20 @@ namespace ReestrClient
             try
             {
                 var info = await login.LogIn(materialTextBoxLogin.Text, materialTextBoxPassword.Text);
-                var t = new Thread(() => Application.Run(new FormReestr(info.Item1)));
-                t.Start();
-                this.Close();
+                if(info.Item2 == "OK")
+                {
+                    var t = new Thread(() => Application.Run(new FormReestr(info.Item1)));
+                    t.Start();
+                    this.Close();
+                } else
+                {
+                    MaterialMessageBox.Show("Ошибка авторизации");
+                }
+               
             }
             catch (Exception ex)
             {
-                MaterialMessageBox.Show("Логин или пароль введены неверно", "Ошибка авторизации");
+                MaterialMessageBox.Show("Что то пошло не так...");
             }
         }
 

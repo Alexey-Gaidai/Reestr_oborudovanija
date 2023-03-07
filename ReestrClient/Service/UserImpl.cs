@@ -35,8 +35,8 @@ namespace ReestrClient.Service
                     Encoding encoding = Encoding.GetEncoding("utf-8");
                     data = encoding.GetString(bytes, 0, bytes.Length);
                     result.EnsureSuccessStatusCode();
+                    message = result.StatusCode.ToString();
                 }
-
                 authInfo = JsonConvert.DeserializeObject<AuthInfo>(data);
                 Console.WriteLine(authInfo.access_token);
                 return (authInfo, message);
