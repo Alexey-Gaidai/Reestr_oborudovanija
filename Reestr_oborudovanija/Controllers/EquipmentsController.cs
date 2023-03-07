@@ -27,7 +27,6 @@ namespace Reestr_oborudovanija.Controllers
 
         // GET: api/Equipments
         [HttpGet]
-        [Authorize]
         public async Task<ActionResult<IEnumerable<Equipment>>> GetEquipments()
         {
             _logger.LogInformation($"Пользователь {Request.Headers["Username"]} совершил запрос оборудования", DateTime.UtcNow.ToLongTimeString());
@@ -51,6 +50,7 @@ namespace Reestr_oborudovanija.Controllers
         // PUT: api/Equipments/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutEquipment(int id, EquipmentClient newEquipment)
         {
             var old = _context.Equipments.AsNoTracking().FirstOrDefault(e => e.Id == newEquipment.Id);
@@ -73,7 +73,7 @@ namespace Reestr_oborudovanija.Controllers
                 Required = newEquipment.Required,
                 Storage_id = newEquipment.Storage_id
             };
-            
+
             if (id != equipment.Id)
             {
                 return BadRequest();
@@ -110,6 +110,7 @@ namespace Reestr_oborudovanija.Controllers
         // POST: api/Equipments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Equipment>> PostEquipment(EquipmentClient newEquipment)
         {
             var equipment = new Equipment
@@ -144,6 +145,7 @@ namespace Reestr_oborudovanija.Controllers
 
         // DELETE: api/Equipments/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteEquipment(int id)
         {
             var equipment = await _context.Equipments.FindAsync(id);

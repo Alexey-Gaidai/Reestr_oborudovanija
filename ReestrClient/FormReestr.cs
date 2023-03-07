@@ -67,10 +67,10 @@ namespace ReestrClient
             PopulateTreeView();
         }
 
-        private async void PopulateTreeView()
+        private void PopulateTreeView()
         {
             // Получаем список всех объектов Equipment, отсортированных по Storage_id и Name
-            List<Equipment> equipmentList = await GetEquipmentList();
+            List<Equipment> equipmentList = equip;
             equipmentList.OrderBy(e => e.Storage_id)
                          .ThenBy(e => e.Name)
                          .ToList();
@@ -90,24 +90,6 @@ namespace ReestrClient
                 var equipmentNodes = equipmentList.Where(e => e.Storage_id == storageNode.Storage_id).ToList();
                 foreach (var equipmentNode in equipmentNodes)
                 {
-                    /*
-                    отображать следующую информацию:
-                    - Название оборудования
-                    - прибор/расходник
-                    - если прибор, то на балансе / не на балансе
-                    - если на балансе, то название по ведомости
-                    - если на балансе, то инвентарный номер (это число многоразрядное, но может быть и прочерк)
-                    - если на балансе, то Балансовая стоимость (в рублях)
-                    - если на балансе, то Сумма амортизации (в рублях)
-                    - если на балансе, то Остаточная стоимость (в рублях)
-                    - если прибор, то работает/не работает/ремонтопригодно/требуются компоненты
-                    - где хранится
-                    - если прибор, то в какой работе используется
-                    - если расходник, то к какому/каким приборам (список ссылок)
-                    - статус: используется/может использоваться/требуется списание с баланса/списано с баланса, но используется/поставить на баланс/выбросить/требуется ремонт/требуется утилизация/утилизировано/требуется передать
-                    - место передачи, если статус Требуется передать
-                    - комментарий
-                     */
                     TreeNode equipmentTreeNode = new TreeNode(equipmentNode.Name);
                     equipmentTreeNode.Tag = equipmentNode.Id;
                     rootNode.Nodes.Add(equipmentTreeNode);
@@ -120,6 +102,9 @@ namespace ReestrClient
                     // Добавляем дочерние узлы для дополнительной информации об оборудовании
                     TreeNode accountingNode = new TreeNode($"Учет/Не учет: {equipmentNode.Accounting}");
                     equipmentTreeNode.Nodes.Add(accountingNode);
+
+                    TreeNode usagesNode = new TreeNode($"Используется/Не исспользуется: {equipmentNode.Usages}");
+                    equipmentTreeNode.Nodes.Add(usagesNode);
 
                     TreeNode inventoryNumberNode = new TreeNode($"Инвентарный номер: {equipmentNode.InventoryNumber}");
                     equipmentTreeNode.Nodes.Add(inventoryNumberNode);
@@ -136,7 +121,7 @@ namespace ReestrClient
                     TreeNode statusNode = new TreeNode($"Статус: {equipmentNode.Status_id}");
                     equipmentTreeNode.Nodes.Add(statusNode);
 
-                    if (statuses.Find(s => s.Id == equipmentNode.Status_id).Name == "Требуется передать")
+                    if (statuses.Find(s => s.Id == equipmentNode.Status_id).Name == "Передача")
                     {
                         TreeNode transferToNode = new TreeNode($"Место передачи: {equipmentNode.TransferTo}");
                         equipmentTreeNode.Nodes.Add(transferToNode);
@@ -154,7 +139,6 @@ namespace ReestrClient
                 var (equip,error) = await data.Get<Equipment>(authInfo, "Equipments");
                 if (equip != null)
                 {
-                    MessageBox.Show("equip: "+equip.Count.ToString());
                     return equip;
                 }
                 return equip;
@@ -173,7 +157,6 @@ namespace ReestrClient
                 var (status, error) = await data.Get<Status>(authInfo, "Status");
                 if (status != null)
                 {
-                    MessageBox.Show("status: " + status.Count.ToString());
                     return status;
                 }
                 return status;
@@ -192,7 +175,6 @@ namespace ReestrClient
                 var (storages, error) = await data.Get<Storage>(authInfo, "Storages");
                 if (storages != null)
                 {
-                    MessageBox.Show("storages: " + storages.Count.ToString());
                     return storages;
                 }
                 return storages;
@@ -211,7 +193,6 @@ namespace ReestrClient
                 var (states, error) = await data.Get<State>(authInfo, "States");
                 if (states != null)
                 {
-                    MessageBox.Show("states: " + states.Count.ToString());
                     return states;
                 }
                 return states;
@@ -295,12 +276,7 @@ namespace ReestrClient
                 try
                 {
                     message = await data.Post<Equipment>(authInfo, "Equipments", equipment);
-                    if (message == "Created")
-                    {
-                        MessageBox.Show("Создано");
-                    }
-                    else
-                        MessageBox.Show(message);
+                    MessageBox.Show("Создано");
                 }
                 catch
                 {
@@ -322,12 +298,7 @@ namespace ReestrClient
                 try
                 {
                     message = await data.Put<Equipment>(authInfo, "Equipments", equipment.Id, equipment);
-                    if (message == "Created")
-                    {
-                        MessageBox.Show("Обновлено");
-                    }
-                    else
-                        MessageBox.Show(message);
+                    MessageBox.Show("Обновлено");
                 }
                 catch
                 {
@@ -336,7 +307,7 @@ namespace ReestrClient
             }
         }
 
-        // метод который создает новый объект equipment из введенных данных с проверкой на корректность
+        // метод который создает новый объект equipment из введенных данных
         private bool CreateEquipment()
         {
             singleEquipment = new Equipment();
@@ -396,12 +367,7 @@ namespace ReestrClient
             try
             {
                 message = await data.Delete(authInfo, "Equipments", Convert.ToInt32(textBoxID.Text));
-                if (message == "Created")
-                {
-                    MessageBox.Show("Удалено");
-                }
-                else
-                    MessageBox.Show(message);
+                MessageBox.Show("Удалено");
             }
             catch
             {
@@ -436,6 +402,29 @@ namespace ReestrClient
         private void обновитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UpdateAll();
+        }
+
+        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void comboBoxStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void comboBoxStatus_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (comboBoxStatus.Text == statuses.Find(s => s.Name == "Передача").Name)
+            {
+                textBoxTransferTo.Enabled = true;
+            }
+            else
+            {
+                textBoxTransferTo.Enabled = false;
+                textBoxTransferTo.Text = "";
+            }
         }
     }
 }

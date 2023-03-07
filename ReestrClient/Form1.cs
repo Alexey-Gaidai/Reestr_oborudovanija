@@ -45,5 +45,11 @@ namespace ReestrClient
                 MaterialMessageBox.Show("Логин или пароль введены неверно", "Ошибка авторизации");
             }
         }
+
+        private void materialLabelSignUp_Click(object sender, EventArgs e)
+        {
+            FormNewUser signUp = new FormNewUser();
+            signUp.Show();
+        }
     }
 }

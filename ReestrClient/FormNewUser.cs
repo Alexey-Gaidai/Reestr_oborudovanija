@@ -53,13 +53,16 @@ namespace ReestrClient
                 {
                     result = await SignUp.SignUp(materialTextBoxName.Text, materialTextBoxLastname.Text, materialTextBoxLogin.Text, materialTextBoxPassword.Text);
                     if (result == "Conflict")
-                        MaterialMessageBox.Show("Указанный email уже используется", "User already exists");
+                        MaterialMessageBox.Show("Указанный логин уже используется", "User already exists");
                     else
+                    {
                         MaterialMessageBox.Show(result);
+                        this.Close();
+                    }
                 }
                 else
                 {
-                    MaterialMessageBox.Show("Пароли не совпадают, либо вы не приняли соглашение.");
+                    MaterialMessageBox.Show("Пароли не совпадают");
                 }
             }
             catch (Exception ex)
