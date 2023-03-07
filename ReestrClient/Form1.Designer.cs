@@ -167,7 +167,9 @@
             this.Controls.Add(this.materialTextBoxPassword);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.materialTextBoxLogin);
+            this.MaximizeBox = false;
             this.Name = "FormLogin";
+            this.Sizable = false;
             this.Text = "Вход";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

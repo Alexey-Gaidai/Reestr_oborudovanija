@@ -306,7 +306,9 @@
             this.Controls.Add(this.materialTextBoxLastname);
             this.Controls.Add(this.materialLabel1);
             this.Controls.Add(this.materialTextBoxName);
+            this.MaximizeBox = false;
             this.Name = "FormNewUser";
+            this.Sizable = false;
             this.Text = "Добавить пользователя";
             this.ResumeLayout(false);
             this.PerformLayout();

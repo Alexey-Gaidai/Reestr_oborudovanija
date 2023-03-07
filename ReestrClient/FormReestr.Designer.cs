@@ -555,7 +555,9 @@
             this.Controls.Add(this.treeViewDeprecation);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "FormReestr";
+            this.Sizable = false;
             this.Text = "FormReestr";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
